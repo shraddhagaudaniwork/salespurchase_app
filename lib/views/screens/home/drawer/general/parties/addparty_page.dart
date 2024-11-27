@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:salespurchase_app/utills/app_colors.dart';
 import 'package:salespurchase_app/views/screens/home/drawer/general/parties/party_controller.dart';
+import 'package:salespurchase_app/widgets/appbar/custom_appbartextwidget.dart';
+import 'package:salespurchase_app/widgets/appbar/custom_appbarwidget.dart';
 
 class AddPartiespage extends StatelessWidget {
   const AddPartiespage({super.key});
@@ -12,6 +14,11 @@ class AddPartiespage extends StatelessWidget {
     PartyPostApiController partyPostApiController =
         Get.put(PartyPostApiController());
     return Scaffold(
+      appBar: const CustomAppBarWidget(
+        title: CustomAppBarTextWidget(
+          text: "Add Parties Page",
+        ),
+      ),
       backgroundColor: AppColors.backgroundcolor,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -19,29 +26,43 @@ class AddPartiespage extends StatelessWidget {
           children: [
             TextField(
               controller: partyPostApiController.nameController,
-              decoration: const InputDecoration(labelText: 'Party Name'),
+              decoration: const InputDecoration(
+                labelText: 'Party Name',
+              ),
             ),
             TextField(
               controller: partyPostApiController.companynameController,
-              decoration: const InputDecoration(labelText: 'Company Name'),
+              decoration: const InputDecoration(
+                labelText: 'Company Name',
+              ),
             ),
             TextField(
               controller: partyPostApiController.emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(
+                labelText: 'Email',
+              ),
             ),
             TextField(
               controller: partyPostApiController.phonenumberController,
-              decoration: const InputDecoration(labelText: 'Phone Number'),
+              decoration: const InputDecoration(
+                labelText: 'Phone Number',
+              ),
             ),
             TextField(
               controller: partyPostApiController.receivablesController,
-              decoration: const InputDecoration(labelText: 'Receivables'),
+              decoration: const InputDecoration(
+                labelText: 'Receivables',
+              ),
             ),
             TextField(
               controller: partyPostApiController.unusedcreditsController,
-              decoration: const InputDecoration(labelText: 'Unused credits'),
+              decoration: const InputDecoration(
+                labelText: 'Unused credits',
+              ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(
+              height: 20,
+            ),
             Obx(
               () => partyPostApiController.isLoading.value
                   ? const CircularProgressIndicator()
@@ -76,13 +97,17 @@ class AddPartiespage extends StatelessWidget {
                             // 'description':
                             //     partyPostApiController.descriptionController.text,
                           };
-                          print("Sending Party Data: $partyData"); // Debugging
+                          print(
+                            "Sending Party Data: $partyData",
+                          ); // Debugging
                           partyPostApiController.createParty(
                             partyData,
                           );
                         }
                       },
-                      child: const Text('Create Party'),
+                      child: const Text(
+                        'Create Party',
+                      ),
                     ),
             ),
           ],

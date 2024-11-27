@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:salespurchase_app/routes/route_name.dart';
 import 'package:salespurchase_app/views/screens/createaccount/signup.dart';
+import 'package:salespurchase_app/views/screens/home/drawer/general/items/inventory/addinventory_page.dart';
 import 'package:salespurchase_app/views/screens/home/drawer/general/parties/addparty_page.dart';
 import 'package:salespurchase_app/views/screens/home/drawer/general/parties/widget/partydetail_page.dart';
 import 'package:salespurchase_app/views/screens/introscreen/introscreen1.dart';
@@ -58,6 +59,7 @@ class RoutesPage {
     //GENERAL:
     //Items in Drawer:
     GetPage(name: RoutesName.inventorypage, page: () => const Inventory_page()),
+    GetPage(name: RoutesName.addinventorypage, page: () => const AddInventory_page()),
     GetPage(name: RoutesName.warehousepage, page: () => const Warehouse_page()),
 
     //Sales in Drawer:

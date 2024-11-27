@@ -9,6 +9,7 @@ class RoutesName {
   //GENERAL:
   // items in Drawer:
   static String inventorypage = '/inventory_page';
+  static String addinventorypage = '/addinventory_page';
   static String warehousepage = '/warehouse_page';
 
   // sales in Drawer:

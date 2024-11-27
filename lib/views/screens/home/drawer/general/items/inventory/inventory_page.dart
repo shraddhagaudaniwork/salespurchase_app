@@ -10,6 +10,7 @@ import '../../../../../../../commoncomponent/commontext/commontext.dart';
 import '../../../../../../../commoncomponent/container/container.dart';
 import '../../../../../../../components/homecomponent/drawer/widgets/drawercomponent.dart';
 import '../../../../../../../responsive/sizeconfig.dart';
+import '../../../../../../../routes/route_name.dart';
 import '../../../../../../../utills/app_colors.dart';
 import '../../../../../../../utills/static_decoration.dart';
 import '../../../../../../../widgets/appbar/custom_appbartextwidget.dart';
@@ -28,6 +29,8 @@ class Inventory_page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     InventoryController inventoryController = Get.put(InventoryController());
+    InventoryEditApiController inventoryEditApiController =
+        Get.put(InventoryEditApiController());
     GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
     return Scaffold(
       // key: _scaffoldkey,
@@ -48,7 +51,8 @@ class Inventory_page extends StatelessWidget {
 
         // Show user data once loaded
         return ListView.builder(
-          itemCount: inventoryController.allinventorydata.value?.inventory.length,
+          itemCount:
+              inventoryController.allinventorydata.value?.inventory.length,
           itemBuilder: (context, i) {
             var user = inventoryController.allinventorydata.value?.inventory[i];
             // return Text("${partyController.alldata.value?.parties[i].receivables}");
@@ -85,6 +89,7 @@ class Inventory_page extends StatelessWidget {
                           ),
                           onPressed: () {
                             Navigator.of(ctx).pop(); // Close the dialog
+                            inventoryController.deleteInventory(user!.id);
                             // partyController
                             //     .deleteParty(user!.id); // Call delete function
                           },
@@ -107,7 +112,7 @@ class Inventory_page extends StatelessWidget {
                       ),
                       actions: [
                         Form(
-                          // key: _formKey,
+                          key: inventoryController.formKey,
                           child: Column(
                             children: [
                               TextFormField(
@@ -117,10 +122,11 @@ class Inventory_page extends StatelessWidget {
                                   }
                                   return null;
                                 },
-                                // controller:
-                                // partyEditApiController.editnameController,
-                                decoration:
-                                const InputDecoration(hintText: "Item Name"),
+                                controller: inventoryEditApiController
+                                    .editItemNameController,
+                                decoration: const InputDecoration(
+                                  hintText: "Item Name",
+                                ),
                               ),
                               TextFormField(
                                 validator: (val) {
@@ -129,22 +135,23 @@ class Inventory_page extends StatelessWidget {
                                   }
                                   return null;
                                 },
-                                // controller: partyEditApiController
-                                //     .editcompanynameController,
+                                controller: inventoryEditApiController
+                                    .editItemCodeController,
                                 decoration: const InputDecoration(
-                                    hintText: "Item Code"),
+                                  hintText: "Item Code",
+                                ),
                               ),
                               TextFormField(
                                 validator: (val) {
                                   if (val!.isEmpty) {
-                                    return "Please item code";
+                                    return "Please Purchase price";
                                   }
                                   return null;
                                 },
-                                // controller:
-                                // partyEditApiController.editemailController,
-                                decoration:
-                                const InputDecoration(hintText: "Purchase Price"),
+                                controller: inventoryEditApiController
+                                    .editPurchasePriceController,
+                                decoration: const InputDecoration(
+                                    hintText: "Purchase Price"),
                               ),
                               TextFormField(
                                 validator: (val) {
@@ -153,12 +160,47 @@ class Inventory_page extends StatelessWidget {
                                   }
                                   return null;
                                 },
-                                // controller: partyEditApiController
-                                //     .editreceivablesController,
+                                controller: inventoryEditApiController
+                                    .editSellingPriceController,
                                 decoration: const InputDecoration(
                                     hintText: "Selling price"),
                               ),
-
+                              TextFormField(
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return "Please enter wholesale price";
+                                  }
+                                  return null;
+                                },
+                                controller: inventoryEditApiController
+                                    .editWholesalePriceController,
+                                decoration: const InputDecoration(
+                                    hintText: "Wholesale price"),
+                              ),
+                              TextFormField(
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return "Please enter mrp";
+                                  }
+                                  return null;
+                                },
+                                controller: inventoryEditApiController
+                                    .editMrpController,
+                                decoration:
+                                    const InputDecoration(hintText: "MRP"),
+                              ),
+                              TextFormField(
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return "Please stock quantity";
+                                  }
+                                  return null;
+                                },
+                                controller: inventoryEditApiController
+                                    .editStockQuantityController,
+                                decoration:
+                                    const InputDecoration(hintText: "Quantity"),
+                              ),
                             ],
                           ),
                         ),
@@ -170,41 +212,46 @@ class Inventory_page extends StatelessWidget {
                               onPressed: () => Navigator.of(ctx).pop(),
                             ),
                             TextButton(
-                              child: const Text(
-                                "Edit Inventory",
-                                style: TextStyle(
-                                  color: Colors.red,
+                                child: const Text(
+                                  "Edit Inventory",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ),
                                 ),
-                              ),
-                              onPressed: () {
-                                // if (_formKey.currentState!.validate()) {
-                                //   _formKey.currentState!.save();
-                                //   final updateData = {
-                                //     "name": partyEditApiController
-                                //         .editnameController.text,
-                                //     "companyname": partyEditApiController
-                                //         .editcompanynameController.text,
-                                //     "email": partyEditApiController
-                                //         .editemailController.text,
-                                //     "phonenumber": partyEditApiController
-                                //         .editphonenumberController.text,
-                                //     "receivables": partyEditApiController
-                                //         .editreceivablesController.text,
-                                //     "unusedcredits": partyEditApiController
-                                //         .editunusedcreditsController.text,
-                                //   };
-                                //   partyEditApiController.updateParty(
-                                //     user!.id,
-                                //     updateData,
-                                //   );
-                                //   print(
-                                //     "Sending Update Data: $updateData",
-                                //   ); //
-                                //   Navigator.of(ctx).pop(); // Close the dialog
-                                  // Call delete function
-                                }
+                                onPressed: () {
+                                  if (inventoryController.formKey.currentState!
+                                      .validate()) {
+                                    inventoryController.formKey.currentState!
+                                        .save();
+                                    final inventoryData = {
+                                      "itemname": inventoryEditApiController
+                                          .editItemNameController.text,
+                                      "itemcode": inventoryEditApiController
+                                          .editItemCodeController.text,
+                                      "sellingprice": inventoryEditApiController
+                                          .editSellingPriceController.text,
+                                      "purchaseprice":
+                                          inventoryEditApiController
+                                              .editPurchasePriceController.text,
+                                      "wholesaleprice":
+                                          inventoryEditApiController
+                                              .editWholesalePriceController
+                                              .text,
+                                      "mrp": inventoryEditApiController
+                                          .editMrpController.text,
+                                      "stokeqty": inventoryEditApiController
+                                          .editStockQuantityController.text,
+                                    };
+                                    inventoryEditApiController.updateInventory(
+                                        user!.id, inventoryData);
 
-                            ),
+                                    print(
+                                      "Sending Update Data: $inventoryData",
+                                    ); //
+                                    Navigator.of(ctx).pop(); // Close the dialog
+                                    // Call delete function
+                                  }
+                                }),
                           ],
                         ),
                       ],
@@ -244,7 +291,11 @@ class Inventory_page extends StatelessWidget {
       // ),
 
       bottomNavigationBar: const BottomnavigationbarWidget(),
-      floatingActionButton: const FloatingactionaddbuttonWidget(),
+      floatingActionButton: FloatingactionaddbuttonWidget(
+        onPressed: () {
+          Get.toNamed(RoutesName.addinventorypage);
+        },
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
