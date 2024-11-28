@@ -43,6 +43,7 @@ class PartyController extends GetxController {
         // return userModel;
       } else {
         print("Api call failed:${res.statusCode}");
+        update();
       }
     } on Exception catch (e) {
       alldata.value = null; // or handle the error state
@@ -80,6 +81,7 @@ class PartyController extends GetxController {
           "Error",
           "Failed to delete party: ${response.body}",
         );
+        update();
       }
     } catch (e) {
       Get.snackbar(
@@ -100,7 +102,7 @@ class PartyPostApiController extends GetxController {
   final TextEditingController receivablesController = TextEditingController();
   final TextEditingController unusedcreditsController = TextEditingController();
 
-  // final TextEditingController descriptionController = TextEditingController();
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   // Reactive variable to track loading state
   var isLoading = false.obs;
@@ -114,6 +116,10 @@ class PartyPostApiController extends GetxController {
     try {
       print("Start");
       isLoading.value = true;
+      // if (!GetUtils.isEmail(partyData['email'] ?? "")) {
+      //   Get.snackbar("Error", "Please provide a valid email address.");
+      //
+      // }/
 
       final response = await http.post(
         Uri.parse(apikey),
@@ -126,17 +132,23 @@ class PartyPostApiController extends GetxController {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData = jsonDecode(response.body);
+
         print(
           "ResponseData:$responseData",
         );
+
         Get.snackbar("Success", "Party created: ${responseData['message']}");
         print("end");
+        update();
       } else {
-        final errorData = jsonDecode(response.body);
+        final errorData = jsonDecode(
+          response.body,
+        );
         Get.snackbar(
           "Error",
           "Failed: ${errorData['message'] ?? 'Unknown error'}",
         );
+        update();
       }
     } catch (e) {
       print("Error Catch Data: $e"); // Debugging the error
@@ -221,10 +233,17 @@ class PartyEditApiController extends GetxController {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         Get.snackbar(
-            "Success", data['message'] ?? "Party updated successfully");
+          "Success",
+          data['message'] ?? "Party updated successfully",
+        );
+        update();
       } else {
         final error = jsonDecode(response.body);
-        Get.snackbar("Error", error['message'] ?? "Failed to update party");
+        Get.snackbar(
+          "Error",
+          error['message'] ?? "Failed to update party",
+        );
+        update();
       }
     } catch (e) {
       print("Error in updateParty: $e");

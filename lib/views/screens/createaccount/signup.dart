@@ -24,253 +24,259 @@ class SignUpPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundcolor,
       body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Form(
-            key: signUpController.signuprformkey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: SizeConfig().getPadding(
-                    left: 16,
-                    top: 32,
-                    bottom: 10,
-                  ),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: SvgPicture.asset(
-                          AppAsset.backarrow,
-                          // height: MediaQuery.of(context).size.height * 0.050,
-                          // width: MediaQuery.of(context).size.width * 0.025,
-                          fit: BoxFit.cover,
-                        ),
+        physics: const BouncingScrollPhysics(),
+        child: Form(
+          key: signUpController.signuprformkey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: SizeConfig().getPadding(
+                  left: 16,
+                  top: 32,
+                  bottom: 10,
+                ),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: SvgPicture.asset(
+                        AppAsset.backarrow,
+                        // height: MediaQuery.of(context).size.height * 0.050,
+                        // width: MediaQuery.of(context).size.width * 0.025,
+                        fit: BoxFit.cover,
                       ),
-                      Padding(
-                        padding: SizeConfig().getPadding(
-                          left: 60,
-                          right: 50,
-                        ),
-                        child: SvgPicture.asset(
-                          AppAsset.logo1,
-                          height: MediaQuery.of(context).size.height * 0.040,
-                          width: MediaQuery.of(context).size.width * 0.022,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    Padding(
+                      padding: SizeConfig().getPadding(
+                        left: 60,
+                        right: 50,
+                      ),
+                      child: SvgPicture.asset(
+                        AppAsset.logo1,
+                        height: MediaQuery.of(context).size.height * 0.040,
+                        width: MediaQuery.of(context).size.width * 0.022,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  ],
                 ),
-                height20,
-                Center(
-                  child: SvgPicture.asset(
-                    AppAsset.signup,
-                    height: MediaQuery.of(context).size.height * 0.200,
-                    width: MediaQuery.of(context).size.width * 0.250,
-                    fit: BoxFit.cover,
-                  ),
+              ),
+              height20,
+              Center(
+                child: SvgPicture.asset(
+                  AppAsset.signup,
+                  height: MediaQuery.of(context).size.height * 0.200,
+                  width: MediaQuery.of(context).size.width * 0.250,
+                  fit: BoxFit.cover,
                 ),
-                Padding(
-                  padding: SizeConfig().getPadding(all: 20),
-                  child: const CommonBlackTextTitleWidget(
-                    text: "Create Your Account",
-                    fontSize: 18,
-                  ),
+              ),
+              Padding(
+                padding: SizeConfig().getPadding(all: 20),
+                child: const CommonBlackTextTitleWidget(
+                  text: "Create Your Account",
+                  fontSize: 18,
                 ),
+              ),
 
-                ///first Name:
-                Padding(
-                  padding: SizeConfig().getPadding(
-                    right: 20,
-                    left: 20,
-                    bottom: 15,
-                  ),
-                  child: CustomTextFormField(
-                    prefixIcon: Padding(
-                      padding: SizeConfig().getPadding(
-                        all: 16,
-                      ),
-                      child: SvgPicture.asset(
-                        AppAsset.people,
-                        fit: BoxFit.contain,
-                        // height: 3,
-                        // width: 3,
-                      ),
+              ///first Name:
+              Padding(
+                padding: SizeConfig().getPadding(
+                  right: 20,
+                  left: 20,
+                  bottom: 15,
+                ),
+                child: CustomTextFormField(
+                  prefixIcon: Padding(
+                    padding: SizeConfig().getPadding(
+                      all: 16,
                     ),
-                    controller: signUpController.firstnameController,
-                    hintText: "First Name",
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return "Enter First Name";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                //phone Number:
-                Padding(
-                  padding: SizeConfig().getPadding(
-                    right: 20,
-                    left: 20,
-                    bottom: 15,
-                  ),
-                  child: CustomTextFormField(
-                    controller: signUpController.phonenonameController,
-                    prefixIcon: Padding(
-                      padding: SizeConfig().getPadding(
-                        all: 16,
-                      ),
-                      child: SvgPicture.asset(
-                        AppAsset.people,
-                        fit: BoxFit.contain,
-                        // height: 3,
-                        // width: 3,
-                      ),
+                    child: SvgPicture.asset(
+                      AppAsset.people,
+                      fit: BoxFit.contain,
+                      // height: 3,
+                      // width: 3,
                     ),
-                    hintText: "Phone No",
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return "Enter Phone Number";
-                      }
-                      return null;
-                    },
                   ),
+                  controller: signUpController.firstnameController,
+                  hintText: "First Name",
+                  validator: (val) {
+                    if (val!.isEmpty) {
+                      return "Enter First Name";
+                    }
+                    return null;
+                  },
                 ),
-                //email:
-                Padding(
-                  padding: SizeConfig().getPadding(
-                    right: 20,
-                    left: 20,
-                    bottom: 15,
-                  ),
-                  child: CustomTextFormField(
-                    controller: signUpController.emailnameController,
-                    prefixIcon: Padding(
-                      padding: SizeConfig().getPadding(
-                        all: 16,
-                      ),
-                      child: SvgPicture.asset(
-                        AppAsset.email,
-                        fit: BoxFit.contain,
-                        // height: 3,
-                        // width: 3,
-                      ),
+              ),
+              //phone Number:
+              Padding(
+                padding: SizeConfig().getPadding(
+                  right: 20,
+                  left: 20,
+                  bottom: 15,
+                ),
+                child: CustomTextFormField(
+                  controller: signUpController.phonenonameController,
+                  prefixIcon: Padding(
+                    padding: SizeConfig().getPadding(
+                      all: 16,
                     ),
-                    hintText: "Email",
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return "Enter Email";
-                      }
-                      return null;
-                    },
+                    child: SvgPicture.asset(
+                      AppAsset.people,
+                      fit: BoxFit.contain,
+                      // height: 3,
+                      // width: 3,
+                    ),
                   ),
+                  hintText: "Phone No",
+                  validator: (val) {
+                    if (val!.isEmpty) {
+                      return "Enter Phone Number";
+                    }
+                    return null;
+                  },
                 ),
-                Padding(
-                  padding: SizeConfig().getPadding(
-                    right: 20,
-                    left: 20,
-                    bottom: 10,
-                  ),
-                  child: CustomTextFormField(
-                    prefixIcon: const SizedBox(),
-                    hintText: "Select Country",
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return "Enter Select Country";
-                      }
-                      return null;
-                    },
-                  ),
+              ),
+              //email:
+              Padding(
+                padding: SizeConfig().getPadding(
+                  right: 20,
+                  left: 20,
+                  bottom: 15,
                 ),
-                Padding(
-                  padding: SizeConfig().getPadding(
-                    right: 20,
-                    left: 20,
-                    bottom: 25,
+                child: CustomTextFormField(
+                  controller: signUpController.emailnameController,
+                  prefixIcon: Padding(
+                    padding: SizeConfig().getPadding(
+                      all: 16,
+                    ),
+                    child: SvgPicture.asset(
+                      AppAsset.email,
+                      fit: BoxFit.contain,
+                      // height: 3,
+                      // width: 3,
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      Obx(() {
-                        // return CheckboxMenuButton(value: signUpController.isChecked.value, onChanged: (val){
-                        //   signUpController.toggleCheckbox();
-                        // }, child: Text("hsjc"));
-                        return Checkbox(
-                            activeColor: AppColors.wcolor,
-                            checkColor: AppColors.bluecolor,
-                            value: signUpController.isChecked.value,
-                            onChanged: (val) {
-                              signUpController.toggleCheckbox();
-                            });
-                      }),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RichText(
-                          text: TextSpan(
-                            text:
-                                'By clicking the button below to \ncreate an account, I accept the\n',
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 14),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: 'Terms Of Services',
-                                  style: TextStyle(
-                                    color: Colors.blueAccent,
-                                    fontSize: 14,
-                                    fontWeight: fontWeight600,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Get.toNamed(RoutesName.homecomponent);
-                                    }),
-                              const TextSpan(
-                                text: ' and',
+                  hintText: "Email",
+                  validator: (val) {
+                    if (val!.isEmpty) {
+                      return "Enter Email";
+                    }
+                    if (val.contains('@')) {
+                      return "Please enter a valid email address";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Padding(
+                padding: SizeConfig().getPadding(
+                  right: 20,
+                  left: 20,
+                  bottom: 10,
+                ),
+                child: CustomTextFormField(
+                  prefixIcon: const SizedBox(),
+                  hintText: "Select Country",
+                  validator: (val) {
+                    if (val!.isEmpty) {
+                      return "Enter Select Country";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Padding(
+                padding: SizeConfig().getPadding(
+                  right: 20,
+                  left: 20,
+                  bottom: 25,
+                ),
+                child: Row(
+                  children: [
+                    Obx(() {
+                      // return CheckboxMenuButton(value: signUpController.isChecked.value, onChanged: (val){
+                      //   signUpController.toggleCheckbox();
+                      // }, child: Text("hsjc"));
+                      return Checkbox(
+                          activeColor: AppColors.wcolor,
+                          checkColor: AppColors.bluecolor,
+                          value: signUpController.isChecked.value,
+                          onChanged: (val) {
+                            signUpController.toggleCheckbox();
+                          });
+                    }),
+                    Padding(
+                      padding: const EdgeInsets.all(
+                        8.0,
+                      ),
+                      child: RichText(
+                        text: TextSpan(
+                          text:
+                              'By clicking the button below to \ncreate an account, I accept the\n',
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 14),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Terms Of Services',
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.blueAccent,
                                   fontSize: 14,
+                                  fontWeight: fontWeight600,
                                 ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Get.toNamed(RoutesName.homecomponent);
+                                  }),
+                            const TextSpan(
+                              text: ' and',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
                               ),
-                              TextSpan(
-                                  text: ' \nPrivacy Notice.',
-                                  style: TextStyle(
-                                    color: Colors.blueAccent,
-                                    fontSize: 14,
-                                    fontWeight: fontWeight600,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Get.toNamed(
-                                        RoutesName.homecomponent,
-                                      );
-                                    }),
-                            ],
-                          ),
+                            ),
+                            TextSpan(
+                                text: ' \nPrivacy Notice.',
+                                style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontSize: 14,
+                                  fontWeight: fontWeight600,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Get.toNamed(
+                                      RoutesName.homecomponent,
+                                    );
+                                  }),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: SizeConfig().getPadding(
-                    right: 20,
-                    left: 20,
-                    bottom: 20,
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      if (signUpController.signuprformkey.currentState!
-                          .validate()) {
-                        signUpController.signuprformkey.currentState!.save();
-                      }
-                    },
-                    child: const CreateAccountButton(),
-                  ),
-                )
-              ],
-            ),
-          )),
+              ),
+              Padding(
+                padding: SizeConfig().getPadding(
+                  right: 20,
+                  left: 20,
+                  bottom: 20,
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    if (signUpController.signuprformkey.currentState!
+                        .validate()) {
+                      signUpController.signuprformkey.currentState!.save();
+                    }
+                  },
+                  child: const CreateAccountButton(),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

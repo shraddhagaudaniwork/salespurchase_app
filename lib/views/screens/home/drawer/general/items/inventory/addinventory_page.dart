@@ -24,23 +24,33 @@ class AddInventory_page extends StatelessWidget {
           children: [
             TextField(
               controller: inventoryPostApiController.itemNameController,
-              decoration: const InputDecoration(labelText: 'Item Name'),
+              decoration: const InputDecoration(
+                labelText: 'Item Name',
+              ),
             ),
             TextField(
               controller: inventoryPostApiController.itemCodeController,
-              decoration: const InputDecoration(labelText: 'Item Code'),
+              decoration: const InputDecoration(
+                labelText: 'Item Code',
+              ),
             ),
             TextField(
               controller: inventoryPostApiController.stockQuantityController,
-              decoration: const InputDecoration(labelText: 'Stock Quantity'),
+              decoration: const InputDecoration(
+                labelText: 'Stock Quantity',
+              ),
             ),
             TextField(
               controller: inventoryPostApiController.sellingPriceController,
-              decoration: const InputDecoration(labelText: 'Selling Price'),
+              decoration: const InputDecoration(
+                labelText: 'Selling Price',
+              ),
             ),
             TextField(
               controller: inventoryPostApiController.purchasePriceController,
-              decoration: const InputDecoration(labelText: 'Purchase Price'),
+              decoration: const InputDecoration(
+                labelText: 'Purchase Price',
+              ),
             ),
             TextField(
               controller: inventoryPostApiController.mrpController,
@@ -50,7 +60,9 @@ class AddInventory_page extends StatelessWidget {
               controller: inventoryPostApiController.wholesalePriceController,
               decoration: const InputDecoration(labelText: 'Wholesale Price'),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(
+              height: 20,
+            ),
             Obx(
               () => inventoryPostApiController.isLoading.value
                   ? const CircularProgressIndicator()
@@ -67,7 +79,10 @@ class AddInventory_page extends StatelessWidget {
                                 .purchasePriceController.text.isEmpty &&
                             inventoryPostApiController
                                 .wholesalePriceController.text.isEmpty) {
-                          Get.snackbar("Fill", "Please fil this details..");
+                          Get.snackbar(
+                            "Fill",
+                            "Please fil this details..",
+                          );
                         } else {
                           final inventoryData = {
                             "itemname": inventoryPostApiController
@@ -90,8 +105,9 @@ class AddInventory_page extends StatelessWidget {
                           print(
                             "Sending Inventory Data: $inventoryData",
                           ); //
-                          inventoryPostApiController
-                              .createInventory(inventoryData); // Debugging
+                          inventoryPostApiController.createInventory(
+                            inventoryData,
+                          ); // Debugging
                         }
                       },
                       child: const Text(

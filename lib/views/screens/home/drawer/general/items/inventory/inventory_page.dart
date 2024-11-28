@@ -212,46 +212,44 @@ class Inventory_page extends StatelessWidget {
                               onPressed: () => Navigator.of(ctx).pop(),
                             ),
                             TextButton(
-                                child: const Text(
-                                  "Edit Inventory",
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ),
+                              child: const Text(
+                                "Edit Inventory",
+                                style: TextStyle(
+                                  color: Colors.red,
                                 ),
-                                onPressed: () {
-                                  if (inventoryController.formKey.currentState!
-                                      .validate()) {
-                                    inventoryController.formKey.currentState!
-                                        .save();
-                                    final inventoryData = {
-                                      "itemname": inventoryEditApiController
-                                          .editItemNameController.text,
-                                      "itemcode": inventoryEditApiController
-                                          .editItemCodeController.text,
-                                      "sellingprice": inventoryEditApiController
-                                          .editSellingPriceController.text,
-                                      "purchaseprice":
-                                          inventoryEditApiController
-                                              .editPurchasePriceController.text,
-                                      "wholesaleprice":
-                                          inventoryEditApiController
-                                              .editWholesalePriceController
-                                              .text,
-                                      "mrp": inventoryEditApiController
-                                          .editMrpController.text,
-                                      "stokeqty": inventoryEditApiController
-                                          .editStockQuantityController.text,
-                                    };
-                                    inventoryEditApiController.updateInventory(
-                                        user!.id, inventoryData);
+                              ),
+                              onPressed: () {
+                                if (inventoryController.formKey.currentState!
+                                    .validate()) {
+                                  inventoryController.formKey.currentState!
+                                      .save();
+                                  final inventoryData = {
+                                    "itemname": inventoryEditApiController
+                                        .editItemNameController.text,
+                                    "itemcode": inventoryEditApiController
+                                        .editItemCodeController.text,
+                                    "sellingprice": inventoryEditApiController
+                                        .editSellingPriceController.text,
+                                    "purchaseprice": inventoryEditApiController
+                                        .editPurchasePriceController.text,
+                                    "wholesaleprice": inventoryEditApiController
+                                        .editWholesalePriceController.text,
+                                    "mrp": inventoryEditApiController
+                                        .editMrpController.text,
+                                    "stokeqty": inventoryEditApiController
+                                        .editStockQuantityController.text,
+                                  };
+                                  inventoryEditApiController.updateInventory(
+                                      user!.id, inventoryData);
 
-                                    print(
-                                      "Sending Update Data: $inventoryData",
-                                    ); //
-                                    Navigator.of(ctx).pop(); // Close the dialog
-                                    // Call delete function
-                                  }
-                                }),
+                                  print(
+                                    "Sending Update Data: $inventoryData",
+                                  ); //
+                                  Navigator.of(ctx).pop(); // Close the dialog
+                                  // Call delete function
+                                }
+                              },
+                            ),
                           ],
                         ),
                       ],

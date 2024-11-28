@@ -198,7 +198,6 @@ class _Parties_pageState extends State<Parties_page> {
         if (partyController.isloading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-
         // Show user data once loaded
         return ListView.builder(
           itemCount: partyController.alldata.value?.parties.length,
@@ -246,9 +245,7 @@ class _Parties_pageState extends State<Parties_page> {
                       ],
                     ),
                   );
-
                   // partyDeleteApiController.deleteParty(user!.id);
-
                   // _confirmDelete(context, user!.id,partyController);
                 },
                 editonpressedbutton: () {
@@ -290,9 +287,13 @@ class _Parties_pageState extends State<Parties_page> {
                               ),
                               TextFormField(
                                 validator: (val) {
-                                  if (val!.isEmpty) {
+                                  if (val!.isEmpty ) {
                                     return "Please enter email";
                                   }
+                                else  if (val.contains('@') || val.contains('.')) {
+                                    return "Please enter your email";
+                                  }
+
                                   return null;
                                 },
                                 controller:
@@ -310,7 +311,8 @@ class _Parties_pageState extends State<Parties_page> {
                                 controller: partyEditApiController
                                     .editphonenumberController,
                                 decoration: const InputDecoration(
-                                    hintText: "Phone Number"),
+                                  hintText: "Phone Number",
+                                ),
                               ),
                               TextFormField(
                                 validator: (val) {
@@ -397,7 +399,6 @@ class _Parties_pageState extends State<Parties_page> {
       //   onPressed: () => partyController.fetchPartiesData(),
       //   child: const Icon(Icons.refresh),
       // ),
-
       bottomNavigationBar: const BottomnavigationbarWidget(),
       floatingActionButton: FloatingactionaddbuttonWidget(
         onPressed: () {
