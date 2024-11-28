@@ -106,6 +106,7 @@ class PartyPostApiController extends GetxController {
 
   // Reactive variable to track loading state
   var isLoading = false.obs;
+  RxBool isAutoValidate = false.obs;
 
   // Function to create a party
   Future<void> createParty(Map<String, dynamic> partyData) async {
@@ -159,6 +160,99 @@ class PartyPostApiController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  //check validation for partyname field value:
+  String? partyNameValidator(String value) {
+    if (value.isEmpty || value.length < 5) {
+      return "please enter party name ";
+    }
+    return null;
+  }
+
+  //check validation for companyname field value:
+  String? companyNameValidator(String value) {
+    if (value.isEmpty || value.length < 5) {
+      return "please enter company name";
+    }
+    return null;
+  }
+
+  //check validation for email field value:
+  String? emailValidator(String value) {
+    if (value.isEmpty || !value.contains('@') || !value.contains('.com')) {
+      return 'Please enter a valid email address.';
+    }
+    return null;
+  }
+
+  //check validation for phonenumber field value:
+  String? phoneNumberValidator(String value) {
+    if (value.isEmpty || value.length > 10) {
+      return 'Please enter a valid phone number.';
+    }
+    return null;
+  }
+
+  //check validation for receivable field value:
+  String? recevaibleValidator(String value) {
+    if (value.isEmpty) {
+      return 'Please enter recevaibles .';
+    }
+    return null;
+  }
+
+  //check validation for unusedcredits field value:
+  String? unusedCreditsValidator(String value) {
+    if (value.isEmpty) {
+      return 'Please enter unused credits.';
+    }
+    return null;
+  }
+
+  void clearVariable() {
+    isAutoValidate.value = false;
+    emailController.clear();
+    nameController.clear();
+    companynameController.clear();
+    phonenumberController.clear();
+    receivablesController.clear();
+    unusedcreditsController.clear();
+    update();
+  }
+
+  //create party button pressed:
+  void createPartyButton() {
+    isAutoValidate.value = true;
+    // final isValid = formkey.currentState!.validate();
+    FocusScopeNode currentFocus = FocusScope.of(Get.context!);
+
+    // Get.focusScope!.unfocus();
+
+    if (formkey.currentState!.validate()) {
+      currentFocus.unfocus();
+      formkey.currentState!.save();
+      print(emailController.text);
+      print(phonenumberController.text);
+      print(nameController.text);
+      print(companynameController.text);
+      print(receivablesController.text);
+      print(unusedcreditsController.text);
+      final partyData = {
+        "name": nameController.text,
+        "companyname": companynameController.text,
+        "email": emailController.text,
+        "phonenumber": phonenumberController.text,
+        "receivables": receivablesController.text,
+        "unusedcredits": unusedcreditsController.text,
+      };
+      print(
+        "Sending Party Data: $partyData",
+      ); // Debugging
+      createParty(partyData);
+      // User those values to send our auth request ...
+    }
+    // clearVariable();
   }
 }
 

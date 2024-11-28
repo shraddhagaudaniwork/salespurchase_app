@@ -287,13 +287,12 @@ class _Parties_pageState extends State<Parties_page> {
                               ),
                               TextFormField(
                                 validator: (val) {
-                                  if (val!.isEmpty ) {
+                                  if (val!.isEmpty) {
                                     return "Please enter email";
-                                  }
-                                else  if (val.contains('@') || val.contains('.')) {
+                                  } else if (val.contains('@') ||
+                                      val.contains('.')) {
                                     return "Please enter your email";
                                   }
-
                                   return null;
                                 },
                                 controller:

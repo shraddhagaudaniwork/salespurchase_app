@@ -63,7 +63,7 @@ class InventoryController extends GetxController {
   //delete inventory details by ID:
   Future<void> deleteInventory(String id) async {
     final String api =
-        'http://localhost:3001/v1/items/deleteinventory/$id'; // Replace with your API endpoint
+        'http://localhost:3001/v1/items/deleteinventory/$id';// Replace with your API endpoint
 
     try {
       isLoading.value = true;
@@ -107,7 +107,7 @@ class InventoryPostApiController extends GetxController {
       TextEditingController();
   final TextEditingController mrpController = TextEditingController();
 
-  // final TextEditingController descriptionController = TextEditingController();
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   // Reactive variable to track loading state
   var isLoading = false.obs;
@@ -172,7 +172,8 @@ class InventoryEditApiController extends GetxController {
   final TextEditingController editMrpController = TextEditingController();
 
   // Update Inventory details by ID
-  Future<void> updateInventory(String id, Map<String, dynamic> updateData) async {
+  Future<void> updateInventory(
+      String id, Map<String, dynamic> updateData) async {
     final String url =
         'http://localhost:3001/v1/items/updateinventory/$id'; // Adjust for your backend
 
@@ -192,10 +193,15 @@ class InventoryEditApiController extends GetxController {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         Get.snackbar(
-            "Success", data['message'] ?? "Party updated successfully");
+          "Success",
+          data['message'] ?? "Party updated successfully",
+        );
       } else {
         final error = jsonDecode(response.body);
-        Get.snackbar("Error", error['message'] ?? "Failed to update party");
+        Get.snackbar(
+          "Error",
+          error['message'] ?? "Failed to update party",
+        );
       }
     } catch (e) {
       print("Error in updateParty: $e");
