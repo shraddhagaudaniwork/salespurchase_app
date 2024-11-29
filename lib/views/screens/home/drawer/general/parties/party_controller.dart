@@ -9,7 +9,7 @@ class PartyController extends GetxController {
   Rx<PartyModel?> alldata = Rx<PartyModel?>(null);
 
   RxBool isloading = false.obs;
-  RxBool isLoading = false.obs; // Reactive loading state
+  RxBool isdeleteLoading = false.obs; // Reactive loading state for delete data
 
   @override
   void onInit() {
@@ -62,7 +62,7 @@ class PartyController extends GetxController {
         'http://localhost:3001/v1/parties/deleteparties/$id'; // Replace with your API endpoint
 
     try {
-      isLoading.value = true;
+      isdeleteLoading.value = true;
       // HTTP DELETE request
       final response = await http.delete(
         Uri.parse(api),
@@ -89,7 +89,7 @@ class PartyController extends GetxController {
         "Something went wrong: $e",
       );
     } finally {
-      isLoading.value = false;
+      isdeleteLoading.value = false;
     }
   }
 }
@@ -294,7 +294,10 @@ class PartyPostApiController extends GetxController {
 // }
 
 class PartyEditApiController extends GetxController {
-  var isLoading = false.obs;
+  var isEditLoading = false.obs;
+  RxBool isAutoValidate = false.obs;
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
   final TextEditingController editnameController = TextEditingController();
   final TextEditingController editcompanynameController =
       TextEditingController();
@@ -306,13 +309,15 @@ class PartyEditApiController extends GetxController {
   final TextEditingController editunusedcreditsController =
       TextEditingController();
 
+
+
   // Update party details by ID
-  Future<void> updateParty(String id, Map<String, dynamic> updateData) async {
+  Future<void> updateParty(String? id, Map<String, dynamic> updateData) async {
     final String url =
         'http://localhost:3001/v1/parties/updateparties/$id'; // Adjust for your backend
 
     try {
-      isLoading.value = true;
+      isEditLoading.value = true;
 
       // Make PUT request
       final response = await http.put(
@@ -346,7 +351,64 @@ class PartyEditApiController extends GetxController {
         "Something went wrong: $e",
       );
     } finally {
-      isLoading.value = false;
+      isEditLoading.value = false;
     }
   }
+
+  //check validation for partyname field value:
+  String? nameValidator(String value) {
+    if (value.isEmpty || value.length < 5) {
+      return "please enter party name ";
+    }
+    return null;
+  }
+
+  void clearVariable() {
+    isAutoValidate.value = false;
+    editemailController.clear();
+    editnameController.clear();
+    editcompanynameController.clear();
+    editphonenumberController.clear();
+    editreceivablesController.clear();
+    editunusedcreditsController.clear();
+    update();
+  }
+
+  //create party button pressed:
+  //  editPartyButton({required String Id}) {
+  //   final isValid = formkey.currentState!.validate();
+  //   isAutoValidate.value = true;
+  //
+  //   Get.focusScope!.unfocus();
+  //   // FocusScopeNode currentFocus = FocusScope.of(Get.context!);
+  //   if (isValid) {
+  //     // currentFocus.unfocus();
+  //     formkey.currentState!.save();
+  //     print(editemailController.text);
+  //     print(editphonenumberController.text);
+  //     print(editnameController.text);
+  //     print(editcompanynameController.text);
+  //     print(editreceivablesController.text);
+  //     print(editunusedcreditsController.text);
+  //     final updateData = {
+  //       "name": editnameController.text,
+  //       "companyname": editcompanynameController.text,
+  //       "email": editemailController.text,
+  //       "phonenumber": editphonenumberController.text,
+  //       "receivables": editreceivablesController.text,
+  //       "unusedcredits":
+  //       editunusedcreditsController
+  //           .text,
+  //     };
+  //
+  //     updateParty(Id,updateData);
+  //
+  //     print(
+  //       "Sending Update Data: $updateData",
+  //     );
+  //   }
+  //   clearVariable();
+  // }
+
+
 }

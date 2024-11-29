@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:salespurchase_app/views/screens/home/drawer/general/items/inventory/model/inventory_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,7 +11,7 @@ class InventoryController extends GetxController {
   Rx<InventoryModel?> allinventorydata = Rx<InventoryModel?>(null);
 
   RxBool isloading = false.obs;
-  RxBool isLoading = false.obs;
+  RxBool isdeleteLoading = false.obs;
 
   @override
   void onInit() {
@@ -49,7 +47,10 @@ class InventoryController extends GetxController {
         print("Api call failed:${res.statusCode}");
       }
     } on Exception catch (e) {
-      Get.snackbar("Erroe", e.toString());
+      Get.snackbar(
+        "Erroe",
+        e.toString(),
+      );
       // allinventorydata.value = null; // or handle the error state
       update();
       print(e.toString());
@@ -63,10 +64,10 @@ class InventoryController extends GetxController {
   //delete inventory details by ID:
   Future<void> deleteInventory(String id) async {
     final String api =
-        'http://localhost:3001/v1/items/deleteinventory/$id';// Replace with your API endpoint
+        'http://localhost:3001/v1/items/deleteinventory/$id'; // Replace with your API endpoint
 
     try {
-      isLoading.value = true;
+      isdeleteLoading.value = true;
       // HTTP DELETE request
       final response = await http.delete(
         Uri.parse(api),
@@ -92,7 +93,7 @@ class InventoryController extends GetxController {
         "Something went wrong: $e",
       );
     } finally {
-      isLoading.value = false;
+      isdeleteLoading.value = false;
     }
   }
 }
@@ -128,7 +129,7 @@ class InventoryPostApiController extends GetxController {
         body: jsonEncode(inventoryData),
       );
 
-      print("Response Body: ${response.body}"); // Debugging the raw response
+      print("Response Body: ${response.body}"); // Debugging the raw response:
       print("Response Status Code: ${response.statusCode}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -171,7 +172,7 @@ class InventoryEditApiController extends GetxController {
       TextEditingController();
   final TextEditingController editMrpController = TextEditingController();
 
-  // Update Inventory details by ID
+  // Update Inventory details by ID:
   Future<void> updateInventory(
       String id, Map<String, dynamic> updateData) async {
     final String url =
@@ -179,8 +180,7 @@ class InventoryEditApiController extends GetxController {
 
     try {
       isLoading.value = true;
-
-      // Make PUT request
+      // Make PUT request:
       final response = await http.put(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json'},

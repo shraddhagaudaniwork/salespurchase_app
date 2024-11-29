@@ -15,6 +15,7 @@ import '../../../../../../../utills/static_decoration.dart';
 import '../../../../../../../widgets/appbar/custom_appbartextwidget.dart';
 import '../../../../../../../widgets/appbar/custom_appbarwidget.dart';
 
+import '../../../../../../../widgets/table/commontablewidget.dart';
 import '../../../../navigation/widgets/bottomnavigationbar_widget.dart';
 import '../../../../widgets/floatingactionbutton_widget.dart';
 
@@ -23,6 +24,7 @@ class Warehouse_page extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+ WareHouseController wareHouseController =    Get.put(WareHouseController());
 
     return Scaffold(
       drawer: const DrawerComponents(),
@@ -30,104 +32,253 @@ class Warehouse_page extends StatelessWidget {
       appBar: const CustomAppBarWidget(
         title: CustomAppBarTextWidget(text: "Warehouse"),
       ),
-      body: Padding(
-        padding: padding16,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const WareHousePageContainer(),
-              Padding(
-                padding: SizeConfig().getPadding(top: 15),
-                child: const WareHousePageTopHeader(),
-              ),
-              Padding(
-                padding: SizeConfig().getPadding(top: 15),
-                child: const WareHousePageTable(),
-              ),
+      body:   Obx(() {
+      if (wareHouseController.allwarehousedata.value == null) {
+        const Text("No Parties found");
+      }
 
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  FloatingActionChatButtonWidget(),
-                ],
-              ),
+      if (wareHouseController.isloading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
 
-            ],
-          ),
-        ),
-        // child: Column(
-        //   mainAxisSize: MainAxisSize.min,
-        //   children: [
-        //     BlueContainerWidget(
-        //       width: double.infinity,
-        //       padding: padding16,
-        //       child: Column(
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: [
-        //           CustomTextWidget(
-        //             text: "20",
-        //             color: AppColors.white,
-        //             fontWeight: fontWeightbold,
-        //             fontSize: 20.sp,
-        //           ),
-        //           height05,
-        //           CustomTextWidget(
-        //             text: "Items Expiring(30 days)",
-        //             color: AppColors.white,
-        //             // fontWeight: fontWeightbold,
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //     height10,
-        //     SingleChildScrollView(
-        //       scrollDirection: Axis.horizontal,
-        //       child: Row(
-        //         children: [
-        //           const GreenContainerWidget(
-        //             percentage: "32%",
-        //             text1: '11,75,598.92',
-        //             text2: 'Stock Value',
-        //           ),
-        //           width10,
-        //           const RedContainerWidget(
-        //             percentage: "32%",
-        //             text1: '5',
-        //             text2: 'Low Stock',
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //     height15,
-        //     Row(
-        //       children: [
-        //         const CommonDarkGreyTextTitleWidget(text: "All Warehouses"),
-        //         width10,
-        //         Expanded(
-        //           flex: 12,
-        //           child: CustomContainerWidget(
-        //             padding: padding8,
-        //             alignment: Alignment.center,
-        //             // height: 40.h,
-        //             // width: 100.w,
-        //             color: AppColors.white,
-        //             borderRadius: circular10BorderRadius,
-        //             child: CustomTextFormField(
-        //               borderRadius: 12,
-        //               controller: wareHouseController.searchController,
-        //               onChanged: (val) {
-        //                 print(
-        //                     "=================${wareHouseController.searchController}========");
-        //               },
-        //             ),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ],
-        // ),
-      ),
+      // Show user data once loaded
+      return ListView.builder(
+        itemCount:
+        wareHouseController.allwarehousedata.value?.godown.length,
+        itemBuilder: (context, i) {
+          var user = wareHouseController.allwarehousedata.value?.godown[i];
+          // return Text("${partyController.alldata.value?.parties[i].receivables}");
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CommonTableWidget(
+              title1: "Item Name",
+              detail1: user?.itemname,
+              title2: "Item Code",
+              detail2: user?.itemcode.toString(),
+              title3: "Purchase Price",
+              detail3: user?.itembatch.toString(),
+              title4: "Selling Price",
+              detail4: user?.sellingprice.toString(),
+              title5: "Id",
+              detail5: user?.id,
+              deleteonpressedbutton: () {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text("Confirm Delete"),
+                    content: const Text(
+                      "Are you sure you want to delete this Inventory?",
+                    ),
+                    actions: [
+                      TextButton(
+                        child: const Text("Cancel"),
+                        onPressed: () => Navigator.of(ctx).pop(),
+                      ),
+                      TextButton(
+                        child: const Text(
+                          "Delete",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        onPressed: () {
+                          Navigator.of(ctx).pop(); // Close the dialog
+                          wareHouseController.deleteInventory(user!.id);
+                          // partyController
+                          //     .deleteParty(user!.id); // Call delete function
+                        },
+                      ),
+                    ],
+                  ),
+                );
+
+
+              },
+              // editonpressedbutton: () {
+              //   showDialog(
+              //     context: context,
+              //     builder: (ctx) => AlertDialog(
+              //       title: const Text("Confirm edit"),
+              //       content: const Text(
+              //         "Are you sure you want to edit this Inventory??",
+              //       ),
+              //       actions: [
+              //         Form(
+              //           key: inventoryController.formKey,
+              //           child: Column(
+              //             children: [
+              //               TextFormField(
+              //                 validator: (val) {
+              //                   if (val!.isEmpty) {
+              //                     return "Please enter Item name";
+              //                   }
+              //                   return null;
+              //                 },
+              //                 controller: inventoryEditApiController
+              //                     .editItemNameController,
+              //                 decoration: const InputDecoration(
+              //                   hintText: "Item Name",
+              //                 ),
+              //               ),
+              //               TextFormField(
+              //                 validator: (val) {
+              //                   if (val!.isEmpty) {
+              //                     return "Please enter item code";
+              //                   }
+              //                   return null;
+              //                 },
+              //                 controller: inventoryEditApiController
+              //                     .editItemCodeController,
+              //                 decoration: const InputDecoration(
+              //                   hintText: "Item Code",
+              //                 ),
+              //               ),
+              //               TextFormField(
+              //                 validator: (val) {
+              //                   if (val!.isEmpty) {
+              //                     return "Please Purchase price";
+              //                   }
+              //                   return null;
+              //                 },
+              //                 controller: inventoryEditApiController
+              //                     .editPurchasePriceController,
+              //                 decoration: const InputDecoration(
+              //                     hintText: "Purchase Price"),
+              //               ),
+              //               TextFormField(
+              //                 validator: (val) {
+              //                   if (val!.isEmpty) {
+              //                     return "Please enter selling price";
+              //                   }
+              //                   return null;
+              //                 },
+              //                 controller: inventoryEditApiController
+              //                     .editSellingPriceController,
+              //                 decoration: const InputDecoration(
+              //                     hintText: "Selling price"),
+              //               ),
+              //               TextFormField(
+              //                 validator: (val) {
+              //                   if (val!.isEmpty) {
+              //                     return "Please enter wholesale price";
+              //                   }
+              //                   return null;
+              //                 },
+              //                 controller: inventoryEditApiController
+              //                     .editWholesalePriceController,
+              //                 decoration: const InputDecoration(
+              //                     hintText: "Wholesale price"),
+              //               ),
+              //               TextFormField(
+              //                 validator: (val) {
+              //                   if (val!.isEmpty) {
+              //                     return "Please enter mrp";
+              //                   }
+              //                   return null;
+              //                 },
+              //                 controller: inventoryEditApiController
+              //                     .editMrpController,
+              //                 decoration:
+              //                 const InputDecoration(hintText: "MRP"),
+              //               ),
+              //               TextFormField(
+              //                 validator: (val) {
+              //                   if (val!.isEmpty) {
+              //                     return "Please stock quantity";
+              //                   }
+              //                   return null;
+              //                 },
+              //                 controller: inventoryEditApiController
+              //                     .editStockQuantityController,
+              //                 decoration:
+              //                 const InputDecoration(hintText: "Quantity"),
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //         Row(
+              //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //           children: [
+              //             TextButton(
+              //               child: const Text("Cancel"),
+              //               onPressed: () => Navigator.of(ctx).pop(),
+              //             ),
+              //             TextButton(
+              //               child: const Text(
+              //                 "Edit Inventory",
+              //                 style: TextStyle(
+              //                   color: Colors.red,
+              //                 ),
+              //               ),
+              //               onPressed: () {
+              //                 if (inventoryController.formKey.currentState!
+              //                     .validate()) {
+              //                   inventoryController.formKey.currentState!
+              //                       .save();
+              //                   final inventoryData = {
+              //                     "itemname": inventoryEditApiController
+              //                         .editItemNameController.text,
+              //                     "itemcode": inventoryEditApiController
+              //                         .editItemCodeController.text,
+              //                     "sellingprice": inventoryEditApiController
+              //                         .editSellingPriceController.text,
+              //                     "purchaseprice": inventoryEditApiController
+              //                         .editPurchasePriceController.text,
+              //                     "wholesaleprice": inventoryEditApiController
+              //                         .editWholesalePriceController.text,
+              //                     "mrp": inventoryEditApiController
+              //                         .editMrpController.text,
+              //                     "stokeqty": inventoryEditApiController
+              //                         .editStockQuantityController.text,
+              //                   };
+              //                   inventoryEditApiController.updateInventory(
+              //                       user!.id, inventoryData);
+              //
+              //                   print(
+              //                     "Sending Update Data: $inventoryData",
+              //                   ); //
+              //                   Navigator.of(ctx).pop(); // Close the dialog
+              //                   // Call delete function
+              //                 }
+              //               },
+              //             ),
+              //           ],
+              //         ),
+              //       ],
+              //     ),
+              //   );
+              // },
+            ),
+          );
+        },
+      );
+    }),
+      // body: Padding(
+      //   padding: padding16,
+      //   child: SingleChildScrollView(
+      //     child: Column(
+      //       mainAxisSize: MainAxisSize.min,
+      //       children: [
+      //         const WareHousePageContainer(),
+      //         Padding(
+      //           padding: SizeConfig().getPadding(top: 15),
+      //           child: const WareHousePageTopHeader(),
+      //         ),
+      //         Padding(
+      //           padding: SizeConfig().getPadding(top: 15),
+      //           child: const WareHousePageTable(),
+      //         ),
+      //
+      //         const Row(
+      //           mainAxisAlignment: MainAxisAlignment.end,
+      //           children: [
+      //             FloatingActionChatButtonWidget(),
+      //           ],
+      //         ),
+      //
+      //       ],
+      //     ),
+      //   ),
+      //
+      // ),
       bottomNavigationBar: const BottomnavigationbarWidget(),
       floatingActionButton: const FloatingactionaddbuttonWidget(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

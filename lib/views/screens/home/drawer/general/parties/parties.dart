@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:salespurchase_app/views/screens/home/drawer/general/parties/party_controller.dart';
-import 'package:salespurchase_app/views/screens/home/drawer/general/parties/widget/parties_container.dart';
-import 'package:salespurchase_app/views/screens/home/drawer/general/parties/widget/parties_table.dart';
-import 'package:salespurchase_app/views/screens/home/drawer/general/parties/widget/parties_topheader.dart';
 import 'package:salespurchase_app/widgets/table/commontablewidget.dart';
-import '../../../../../../commoncomponent/commontext/commontext.dart';
 import '../../../../../../components/homecomponent/drawer/widgets/drawercomponent.dart';
 import '../../../../../../responsive/sizeconfig.dart';
 import '../../../../../../routes/route_name.dart';
 import '../../../../../../utills/app_colors.dart';
-import '../../../../../../utills/static_decoration.dart';
 import '../../../../../../widgets/appbar/custom_appbartextwidget.dart';
 import '../../../../../../widgets/appbar/custom_appbarwidget.dart';
 import '../../../navigation/widgets/bottomnavigationbar_widget.dart';
 import '../../../widgets/floatingactionbutton_widget.dart';
-import 'controller/parties_controller.dart';
-import 'models/parties_model.dart';
 
 class Parties_page extends StatefulWidget {
   const Parties_page({super.key});
@@ -27,11 +19,12 @@ class Parties_page extends StatefulWidget {
 }
 
 class _Parties_pageState extends State<Parties_page> {
-  @override
   // late Future<PartyModel?> party;
   PartyController partyController = Get.put(PartyController());
   PartyEditApiController partyEditApiController =
       Get.put(PartyEditApiController());
+  PartyPostApiController partyPostApiController =
+      Get.put(PartyPostApiController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // final PartiesController partiesController = Get.put(PartiesController());
@@ -194,11 +187,10 @@ class _Parties_pageState extends State<Parties_page> {
         if (partyController.alldata.value == null) {
           const Text("No Parties found");
         }
-
         if (partyController.isloading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-        // Show user data once loaded
+        // Show user data once loaded:
         return ListView.builder(
           itemCount: partyController.alldata.value?.parties.length,
           itemBuilder: (context, i) {
@@ -221,7 +213,9 @@ class _Parties_pageState extends State<Parties_page> {
                   showDialog(
                     context: context,
                     builder: (ctx) => AlertDialog(
-                      title: const Text("Confirm Delete"),
+                      title: const Text(
+                        "Confirm Delete",
+                      ),
                       content: const Text(
                         "Are you sure you want to delete this party?",
                       ),
@@ -230,17 +224,23 @@ class _Parties_pageState extends State<Parties_page> {
                           child: const Text("Cancel"),
                           onPressed: () => Navigator.of(ctx).pop(),
                         ),
-                        TextButton(
-                          child: const Text(
-                            "Delete",
-                            style: TextStyle(color: Colors.red),
-                          ),
-                          onPressed: () {
-                            Navigator.of(ctx).pop(); // Close the dialog
-                            partyController.deleteParty(
-                              user!.id,
-                            ); // Call delete function
-                          },
+                        Obx(
+                          () => (partyController.isdeleteLoading.value)
+                              ? const Center(child: CircularProgressIndicator())
+                              : TextButton(
+                                  child: const Text(
+                                    "Delete",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(ctx).pop(); // Close the dialog
+                                    partyController.deleteParty(
+                                      user!.id,
+                                    ); // Call delete function
+                                  },
+                                ),
                         ),
                       ],
                     ),
@@ -258,7 +258,7 @@ class _Parties_pageState extends State<Parties_page> {
                       ),
                       actions: [
                         Form(
-                          key: _formKey,
+                          key: partyEditApiController.formkey,
                           child: Column(
                             children: [
                               TextFormField(
@@ -286,15 +286,8 @@ class _Parties_pageState extends State<Parties_page> {
                                     hintText: "Company Name"),
                               ),
                               TextFormField(
-                                validator: (val) {
-                                  if (val!.isEmpty) {
-                                    return "Please enter email";
-                                  } else if (val.contains('@') ||
-                                      val.contains('.')) {
-                                    return "Please enter your email";
-                                  }
-                                  return null;
-                                },
+                                validator: (val) =>
+                                    partyPostApiController.emailValidator(val!),
                                 controller:
                                     partyEditApiController.editemailController,
                                 decoration:
@@ -335,7 +328,8 @@ class _Parties_pageState extends State<Parties_page> {
                                 controller: partyEditApiController
                                     .editunusedcreditsController,
                                 decoration: const InputDecoration(
-                                    hintText: "Unused credit"),
+                                  hintText: "Unused credit",
+                                ),
                               ),
                             ],
                           ),
@@ -347,42 +341,55 @@ class _Parties_pageState extends State<Parties_page> {
                               child: const Text("Cancel"),
                               onPressed: () => Navigator.of(ctx).pop(),
                             ),
-                            TextButton(
-                              child: const Text(
-                                "Edit",
-                                style: TextStyle(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                  final updateData = {
-                                    "name": partyEditApiController
-                                        .editnameController.text,
-                                    "companyname": partyEditApiController
-                                        .editcompanynameController.text,
-                                    "email": partyEditApiController
-                                        .editemailController.text,
-                                    "phonenumber": partyEditApiController
-                                        .editphonenumberController.text,
-                                    "receivables": partyEditApiController
-                                        .editreceivablesController.text,
-                                    "unusedcredits": partyEditApiController
-                                        .editunusedcreditsController.text,
-                                  };
-                                  partyEditApiController.updateParty(
-                                    user!.id,
-                                    updateData,
-                                  );
-                                  print(
-                                    "Sending Update Data: $updateData",
-                                  ); //
-                                  Navigator.of(ctx).pop(); // Close the dialog
-                                  // Call delete function
-                                }
-                              },
-                            ),
+                            (partyEditApiController.isEditLoading.value)
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : TextButton(
+                                    child: const Text(
+                                      "Edit",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    // onPressed: partyEditApiController
+                                    //   .editPartyButton(Id: user!.id),
+                                    onPressed: () {
+                                      if (partyEditApiController
+                                          .formkey.currentState!
+                                          .validate()) {
+                                        partyEditApiController
+                                            .formkey.currentState!
+                                            .save();
+                                        final updateData = {
+                                          "name": partyEditApiController
+                                              .editnameController.text,
+                                          "companyname": partyEditApiController
+                                              .editcompanynameController.text,
+                                          "email": partyEditApiController
+                                              .editemailController.text,
+                                          "phonenumber": partyEditApiController
+                                              .editphonenumberController.text,
+                                          "receivables": partyEditApiController
+                                              .editreceivablesController.text,
+                                          "unusedcredits":
+                                              partyEditApiController
+                                                  .editunusedcreditsController
+                                                  .text,
+                                        };
+                                        partyEditApiController.updateParty(
+                                          user!.id,
+                                          updateData,
+                                        );
+                                        print(
+                                          "Sending Update Data: $updateData",
+                                        ); //
+                                        Navigator.of(ctx)
+                                            .pop(); // Close the dialog
+                                        // Call delete function
+                                      }
+                                    },
+                                  ),
                           ],
                         ),
                       ],
