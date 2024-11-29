@@ -426,7 +426,9 @@ class _Parties_pageState extends State<Parties_page> {
         ),
         actions: [
           Column(
-            children: [TextFormField()],
+            children: [
+              TextFormField(),
+            ],
           ),
           TextButton(
             child: const Text("Cancel"),
