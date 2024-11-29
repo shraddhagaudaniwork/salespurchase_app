@@ -133,12 +133,13 @@ class PartyPostApiController extends GetxController {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData = jsonDecode(response.body);
-
         print(
           "ResponseData:$responseData",
         );
-
-        Get.snackbar("Success", "Party created: ${responseData['message']}");
+        Get.snackbar(
+          "Success",
+          "Party created: ${responseData['message']}",
+        );
         print("end");
         update();
       } else {
@@ -223,14 +224,13 @@ class PartyPostApiController extends GetxController {
 
   //create party button pressed:
   void createPartyButton() {
+    final isValid = formkey.currentState!.validate();
     isAutoValidate.value = true;
-    // final isValid = formkey.currentState!.validate();
-    FocusScopeNode currentFocus = FocusScope.of(Get.context!);
 
-    // Get.focusScope!.unfocus();
-
-    if (formkey.currentState!.validate()) {
-      currentFocus.unfocus();
+    Get.focusScope!.unfocus();
+    // FocusScopeNode currentFocus = FocusScope.of(Get.context!);
+    if (isValid) {
+      // currentFocus.unfocus();
       formkey.currentState!.save();
       print(emailController.text);
       print(phonenumberController.text);
@@ -252,7 +252,7 @@ class PartyPostApiController extends GetxController {
       createParty(partyData);
       // User those values to send our auth request ...
     }
-    // clearVariable();
+    clearVariable();
   }
 }
 
